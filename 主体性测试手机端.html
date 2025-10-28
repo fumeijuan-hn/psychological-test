@@ -1,0 +1,1058 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>个人主体性强弱测试 - 手机版</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.5;
+            min-height: 100vh;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .container {
+            width: 100%;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding: 0;
+        }
+        
+        .screen {
+            display: none;
+            flex: 1;
+            width: 100%;
+            padding: 20px 15px;
+            overflow-y: auto;
+        }
+        
+        .active {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding: 15px 0;
+            position: relative;
+        }
+        
+        h1 {
+            color: white;
+            font-size: 24px;
+            margin-bottom: 5px;
+            font-weight: 700;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+        }
+        
+        h2 {
+            color: #4a5568;
+            font-size: 20px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        h3 {
+            color: #2d3748;
+            margin: 15px 0 10px;
+            font-size: 18px;
+            padding-left: 10px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .description {
+            color: rgba(255,255,255,0.9);
+            font-size: 14px;
+            max-width: 100%;
+            margin: 0 auto 15px;
+            text-align: center;
+            line-height: 1.4;
+        }
+        
+        .intro-text {
+            color: #4a5568;
+            font-size: 15px;
+            line-height: 1.6;
+            margin-bottom: 25px;
+            text-align: left;
+            background: white;
+            padding: 15px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .question-container {
+            margin-bottom: 20px;
+            padding: 20px 15px;
+            background-color: white;
+            border-radius: 16px;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+        }
+        
+        .question-text {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: #2d3748;
+            line-height: 1.4;
+            text-align: center;
+            font-weight: 600;
+            padding: 0 5px;
+        }
+        
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .option {
+            display: flex;
+            align-items: center;
+            padding: 16px 15px;
+            background-color: #f7fafc;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 2px solid #e2e8f0;
+        }
+        
+        .option:active {
+            transform: scale(0.98);
+        }
+        
+        .option:hover {
+            border-color: #667eea;
+            background-color: #edf2f7;
+        }
+        
+        .option.selected {
+            border-color: #667eea;
+            background-color: #e6fffa;
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.2);
+        }
+        
+        .option input {
+            margin-right: 12px;
+            transform: scale(1.3);
+        }
+        
+        .option label {
+            cursor: pointer;
+            font-size: 16px;
+            color: #4a5568;
+            flex: 1;
+            font-weight: 500;
+        }
+        
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            gap: 10px;
+        }
+        
+        .btn {
+            padding: 14px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+            flex: 1;
+            text-align: center;
+        }
+        
+        .btn:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 6px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-secondary {
+            background: linear-gradient(135deg, #a0aec0 0%, #718096 100%);
+            box-shadow: 0 4px 12px rgba(160, 174, 192, 0.3);
+        }
+        
+        .btn-secondary:active {
+            box-shadow: 0 2px 6px rgba(160, 174, 192, 0.4);
+        }
+        
+        .btn:disabled {
+            background: #cbd5e0;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .progress-container {
+            margin: 15px 0;
+            background-color: rgba(255,255,255,0.3);
+            border-radius: 10px;
+            height: 10px;
+            overflow: hidden;
+            backdrop-filter: blur(5px);
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #48bb78, #38b2ac);
+            border-radius: 10px;
+            width: 0%;
+            transition: width 0.5s ease;
+            box-shadow: 0 2px 8px rgba(72, 187, 120, 0.4);
+        }
+        
+        .progress-text {
+            text-align: center;
+            margin-bottom: 8px;
+            color: white;
+            font-size: 14px;
+            font-weight: 500;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+        }
+        
+        .result {
+            margin-top: 20px;
+            padding: 20px 15px;
+            background-color: white;
+            border-radius: 16px;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+        }
+        
+        .result-title {
+            color: #2d3748;
+            font-size: 22px;
+            margin-bottom: 15px;
+            text-align: center;
+            font-weight: 700;
+        }
+        
+        .score {
+            font-size: 32px;
+            font-weight: bold;
+            color: #2d3748;
+            margin: 10px 0;
+            text-align: center;
+        }
+        
+        .level {
+            font-size: 20px;
+            color: #667eea;
+            margin-bottom: 15px;
+            font-weight: 600;
+            text-align: center;
+        }
+        
+        .interpretation {
+            text-align: left;
+            background-color: #f7fafc;
+            padding: 15px;
+            border-radius: 12px;
+            margin-top: 15px;
+            font-size: 15px;
+            line-height: 1.6;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+        
+        .dimension-info {
+            font-size: 13px;
+            color: #718096;
+            text-align: center;
+            margin-top: 8px;
+            font-style: italic;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 25px;
+            color: rgba(255,255,255,0.8);
+            font-size: 12px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .question-counter {
+            text-align: center;
+            margin-bottom: 10px;
+            color: white;
+            font-size: 15px;
+            font-weight: 500;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+        }
+        
+        .skip-notice {
+            text-align: center;
+            color: #e53e3e;
+            font-size: 13px;
+            margin-top: 10px;
+            font-style: italic;
+        }
+        
+        .dimension-analysis {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin: 15px 0;
+        }
+        
+        .dimension-card {
+            background: white;
+            padding: 15px;
+            border-radius: 12px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+            border-top: 4px solid #667eea;
+        }
+        
+        .dimension-name {
+            font-weight: bold;
+            color: #2d3748;
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+        
+        .dimension-score {
+            font-size: 22px;
+            font-weight: bold;
+            color: #667eea;
+            text-align: center;
+            margin: 5px 0;
+        }
+        
+        .dimension-bar {
+            height: 8px;
+            background-color: #edf2f7;
+            border-radius: 4px;
+            margin: 8px 0;
+            overflow: hidden;
+        }
+        
+        .dimension-progress {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 4px;
+        }
+        
+        .pattern-analysis {
+            background: white;
+            padding: 15px;
+            border-radius: 12px;
+            margin: 15px 0;
+            border-left: 4px solid #9f7aea;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+        }
+        
+        .recommendation {
+            background: #f0fff4;
+            padding: 15px;
+            border-radius: 12px;
+            margin: 15px 0;
+            border-left: 4px solid #48bb78;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+        }
+        
+        .recommendation ul {
+            padding-left: 20px;
+        }
+        
+        .recommendation li {
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .action-buttons .btn {
+            flex: 1;
+        }
+        
+        /* 移动端优化 */
+        @media (max-width: 380px) {
+            .screen {
+                padding: 15px 10px;
+            }
+            
+            h1 {
+                font-size: 22px;
+            }
+            
+            .question-text {
+                font-size: 17px;
+            }
+            
+            .option {
+                padding: 14px 12px;
+            }
+            
+            .btn {
+                padding: 12px 15px;
+                font-size: 15px;
+            }
+        }
+        
+        /* 防止iOS Safari的弹性滚动 */
+        .screen {
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        /* 隐藏滚动条但保持滚动功能 */
+        .screen::-webkit-scrollbar {
+            display: none;
+        }
+        
+        /* 防止文本选择 */
+        .question-text, .option label {
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 欢迎屏幕 -->
+        <div id="welcome-screen" class="screen active">
+            <header>
+                <h1>个人主体性强弱测试</h1>
+                <p class="description">基于心理学理论的科学评估工具</p>
+            </header>
+            
+            <div class="intro-text">
+                <p>本测试基于心理学理论，评估您在以下五个维度的表现：</p>
+                <ul style="margin: 12px 0 12px 20px;">
+                    <li><strong>自我觉察与价值内化</strong> - 了解自我需求和价值观的程度</li>
+                    <li><strong>能动性与自我效能</strong> - 相信自己能达成目标的信心</li>
+                    <li><strong>自主性与内外控</strong> - 感觉能控制自己生活的程度</li>
+                    <li><strong>生命意义感与投入</strong> - 感觉生活有目标和意义</li>
+                    <li><strong>真实性与责任承担</strong> - 在人际关系中保持真实自我</li>
+                </ul>
+                <p>测试包含50道题目，预计需要10-15分钟完成。请根据您的实际情况选择最符合的选项。</p>
+                <p>您可以跳过暂时不想回答的题目，稍后再返回作答。</p>
+            </div>
+            
+            <div style="margin-top: auto; padding: 20px 0;">
+                <button id="start-btn" class="btn">开始测试</button>
+            </div>
+            
+            <footer>
+                <p>注意：本测试结果仅供参考，不能作为任何形式的心理诊断。如有需要，请咨询专业心理医生。</p>
+            </footer>
+        </div>
+        
+        <!-- 测试屏幕 -->
+        <div id="test-screen" class="screen">
+            <header>
+                <h1>个人主体性强弱测试</h1>
+            </header>
+            
+            <div class="progress-text">已完成: <span id="progress-count">0</span>/50</div>
+            <div class="progress-container">
+                <div class="progress-bar" id="progress-bar"></div>
+            </div>
+            
+            <div class="question-counter">题目 <span id="current-question">1</span>/50</div>
+            <div class="dimension-info" id="dimension-info">第一部分：自我觉察与价值内化</div>
+            
+            <div class="question-container">
+                <div class="question-text" id="question-text">问题加载中...</div>
+                
+                <div class="options" id="options-container">
+                    <!-- 选项将通过JavaScript动态生成 -->
+                </div>
+                
+                <div class="skip-notice">您可以暂时跳过此题，稍后再回答</div>
+            </div>
+            
+            <div class="navigation">
+                <button id="prev-btn" class="btn btn-secondary">上一题</button>
+                <button id="skip-btn" class="btn btn-secondary">跳过此题</button>
+                <button id="next-btn" class="btn">下一题</button>
+            </div>
+        </div>
+        
+        <!-- 提交屏幕 -->
+        <div id="submit-screen" class="screen">
+            <header>
+                <h1>个人主体性强弱测试</h1>
+                <p class="description">您已完成所有题目，请提交测试查看结果</p>
+            </header>
+            
+            <div class="progress-text">已完成: 50/50</div>
+            <div class="progress-container">
+                <div class="progress-bar" style="width: 100%;"></div>
+            </div>
+            
+            <div class="intro-text">
+                <p>您已经回答了 <span id="answered-count">0</span> 道题目，跳过了 <span id="skipped-count">0</span> 道题目。</p>
+                <p>在提交前，您可以返回修改任何题目的答案。</p>
+            </div>
+            
+            <div class="action-buttons">
+                <button id="review-btn" class="btn btn-secondary">返回检查</button>
+                <button id="final-submit-btn" class="btn">提交测试</button>
+            </div>
+            
+            <footer>
+                <p>注意：本测试结果仅供参考，不能作为任何形式的心理诊断。如有需要，请咨询专业心理医生。</p>
+            </footer>
+        </div>
+        
+        <!-- 结果屏幕 -->
+        <div id="result-screen" class="screen">
+            <header>
+                <h1>个人主体性强弱测试</h1>
+                <p class="description">您的测试结果</p>
+            </header>
+            
+            <div class="result">
+                <div class="result-title">测试结果</div>
+                <div class="score" id="final-score">0 分</div>
+                <div class="level" id="result-level">结果加载中...</div>
+                
+                <div class="interpretation" id="total-interpretation">
+                    <!-- 总评价将通过JavaScript动态生成 -->
+                </div>
+                
+                <h3>各维度分析</h3>
+                <div class="dimension-analysis" id="dimension-analysis">
+                    <!-- 维度分析将通过JavaScript动态生成 -->
+                </div>
+                
+                <h3>回答模式识别</h3>
+                <div class="pattern-analysis" id="pattern-analysis">
+                    <!-- 模式分析将通过JavaScript动态生成 -->
+                </div>
+                
+                <h3>个性化建议</h3>
+                <div class="recommendation" id="recommendations">
+                    <!-- 建议将通过JavaScript动态生成 -->
+                </div>
+            </div>
+            
+            <div class="action-buttons">
+                <button id="restart-btn" class="btn">重新测试</button>
+            </div>
+            
+            <footer>
+                <p>注意：本测试结果仅供参考，不能作为任何形式的心理诊断。如有需要，请咨询专业心理医生。</p>
+            </footer>
+        </div>
+    </div>
+
+    <script>
+        // 测试数据
+        const testData = {
+            dimensions: [
+                {
+                    title: "第一部分：自我觉察与价值内化",
+                    questions: [
+                        "我清楚地知道什么对我的人生是最重要的。",
+                        "我的行为准则大多来源于我自己的深思熟虑，而非社会或他人的期望。",
+                        "我经常花时间反思自己的感受和行为背后的原因。",
+                        "即使面对反对，我也愿意坚持我自己认为正确的价值观。",
+                        "我能清晰地描述出我的长处和短处。",
+                        "我做的事情，通常是因为我真正认同它，而不是为了取悦别人。",
+                        "我了解什么能真正让我感到快乐和满足。",
+                        "当我的行为与我的价值观不一致时，我会感到明显的不适。",
+                        "我能够接纳自己的复杂性和矛盾性。",
+                        "我的人生选择（如职业、伴侣）主要基于我自己的内心标准。"
+                    ]
+                },
+                {
+                    title: "第二部分：能动性与自我效能",
+                    questions: [
+                        "我相信自己有能力克服生活中遇到的困难。",
+                        "当设定一个目标后，我确信自己能够找到方法去实现它。",
+                        "我善于利用身边的资源来达成我的计划。",
+                        "在面对挑战时，我更多地会思考如何能做到，而不是我做不到。",
+                        "我能够主动发起一项行动，而不总是等待他人指令或外部条件完美。",
+                        "即使一开始失败了，我也会尝试用不同的方法继续努力。",
+                        "我认为自己是我人生的驾驶员，而不是乘客。",
+                        "在团队中，我经常是那个提出想法并推动进程的人。",
+                        "我相信通过我的努力，可以有效地改变我的生活境遇。",
+                        "做决定时，我通常感到自信，并愿意为此承担责任。"
+                    ]
+                },
+                {
+                    title: "第三部分：自主性与内外控",
+                    questions: [
+                        "我的成功或失败主要取决于我自己的努力和能力，而不是运气或命运。",
+                        "我感到我能自由地选择我想过的生活。",
+                        "当事情出错时，我通常会先从自己身上找原因，而不是一味地责怪外界。",
+                        "我很少感到自己的行为是被迫的或出于无奈。",
+                        "我认为我有权利并且有能力对我的生活说不。",
+                        "我的情绪状态更多地是由我自己对事件的解读决定的，而非事件本身。",
+                        "即使环境受限，我仍然感到在如何应对上我有选择的空间。",
+                        "我不会因为他人的评价而轻易否定自己的价值。",
+                        "我感觉我能掌控我人生的主要方向。",
+                        "我的人生剧本是由我自己书写的。"
+                    ]
+                },
+                {
+                    title: "第四部分：生命意义感与投入",
+                    questions: [
+                        "我感觉到我的生活有明确的目标和意义。",
+                        "我对我正在做的事情充满热情和兴趣。",
+                        "即使日常事务是琐碎的，我也能将其与我更大的生命目标联系起来。",
+                        "我经常体验到心流状态（全身心投入以至于忘记了时间）。",
+                        "我认为我的存在对某些人或某个领域是有价值和影响力的。",
+                        "我能够从过去的经历（无论是好是坏）中寻找到意义。",
+                        "我对未来有清晰的愿景和期待。",
+                        "我的生活是充实而有方向的，而非空虚和随波逐流的。",
+                        "我主动地为我生活的各个领域（工作、关系等）创造意义。",
+                        "回顾我的人生，我感到它是连贯且有故事的，而非一系列孤立的事件。"
+                    ]
+                },
+                {
+                    title: "第五部分：真实性与责任承担",
+                    questions: [
+                        "在大多数社交场合中，我都能表现出真实的自己。",
+                        "我敢于为自己的决定和行动所带来的后果负全责。",
+                        "我不会为了融入群体而伪装成另一个人。",
+                        "当犯错误时，我会坦然承认并尽力弥补。",
+                        "我所说的和所做的基本上是一致的。",
+                        "我能够拒绝他人不合理的要求，而不会因此感到内疚。",
+                        "我接纳我的选择所带来的所有不确定性。",
+                        "我认为我有责任去塑造我的人生，而不是等待被拯救。",
+                        "即使在压力下，我也倾向于坚持我认为是真实的东西。",
+                        "我的人生是我选择的结果，我对此感到坦然和负责。"
+                    ]
+                }
+            ],
+            options: [
+                { value: 1, text: "非常不符合" },
+                { value: 2, text: "不太符合" },
+                { value: 3, text: "不确定" },
+                { value: 4, text: "比较符合" },
+                { value: 5, text: "非常符合" }
+            ]
+        };
+
+        // 维度定义
+        const dimensions = [
+            { name: "自我觉察与价值内化", questions: [0, 9], desc: "了解自我需求和价值观的程度" },
+            { name: "能动性与自我效能", questions: [10, 19], desc: "相信自己能达成目标的信心" },
+            { name: "自主性与内外控", questions: [20, 29], desc: "感觉能控制自己生活的程度" },
+            { name: "生命意义感与投入", questions: [30, 39], desc: "感觉生活有目标和意义" },
+            { name: "真实性与责任承担", questions: [40, 49], desc: "在人际关系中保持真实自我" }
+        ];
+
+        // 测试状态
+        let testState = {
+            currentQuestion: 0,
+            answers: new Array(50).fill(null),
+            skipped: new Array(50).fill(false)
+        };
+
+        // 显示指定屏幕
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.classList.remove('active');
+            });
+            document.getElementById(screenId).classList.add('active');
+            
+            // 滚动到顶部
+            window.scrollTo(0, 0);
+        }
+
+        // 获取当前问题的维度信息
+        function getCurrentDimension() {
+            let questionCount = 0;
+            for (let i = 0; i < testData.dimensions.length; i++) {
+                const dimension = testData.dimensions[i];
+                if (testState.currentQuestion < questionCount + dimension.questions.length) {
+                    return {
+                        index: i,
+                        title: dimension.title
+                    };
+                }
+                questionCount += dimension.questions.length;
+            }
+            return { index: 0, title: "" };
+        }
+
+        // 显示当前问题
+        function displayCurrentQuestion() {
+            // 更新进度
+            updateProgress();
+            
+            // 获取当前问题索引和维度信息
+            const dimensionInfo = getCurrentDimension();
+            document.getElementById('dimension-info').textContent = dimensionInfo.title;
+            document.getElementById('current-question').textContent = testState.currentQuestion + 1;
+            
+            // 计算当前问题在维度中的位置
+            let questionCount = 0;
+            for (let i = 0; i < dimensionInfo.index; i++) {
+                questionCount += testData.dimensions[i].questions.length;
+            }
+            const questionInDimension = testState.currentQuestion - questionCount;
+            
+            // 显示问题文本
+            const questionText = testData.dimensions[dimensionInfo.index].questions[questionInDimension];
+            document.getElementById('question-text').textContent = `${testState.currentQuestion + 1}. ${questionText}`;
+            
+            // 显示选项
+            const optionsContainer = document.getElementById('options-container');
+            optionsContainer.innerHTML = '';
+            
+            testData.options.forEach(option => {
+                const optionDiv = document.createElement('div');
+                optionDiv.className = 'option';
+                if (testState.answers[testState.currentQuestion] === option.value) {
+                    optionDiv.classList.add('selected');
+                }
+                
+                const input = document.createElement('input');
+                input.type = 'radio';
+                input.name = 'question';
+                input.id = `option-${option.value}`;
+                input.value = option.value;
+                input.checked = testState.answers[testState.currentQuestion] === option.value;
+                
+                const label = document.createElement('label');
+                label.htmlFor = `option-${option.value}`;
+                label.textContent = option.text;
+                
+                optionDiv.appendChild(input);
+                optionDiv.appendChild(label);
+                
+                // 添加点击事件
+                optionDiv.addEventListener('click', () => {
+                    testState.answers[testState.currentQuestion] = option.value;
+                    testState.skipped[testState.currentQuestion] = false;
+                    displayCurrentQuestion();
+                    
+                    // 自动跳转到下一题（如果不是最后一题）
+                    if (testState.currentQuestion < 49) {
+                        setTimeout(() => {
+                            nextQuestion();
+                        }, 500);
+                    }
+                });
+                
+                optionsContainer.appendChild(optionDiv);
+            });
+            
+            // 更新导航按钮状态
+            document.getElementById('prev-btn').disabled = testState.currentQuestion === 0;
+            
+            // 如果是最后一题，更改下一题按钮文本
+            if (testState.currentQuestion === 49) {
+                document.getElementById('next-btn').textContent = '完成测试';
+            } else {
+                document.getElementById('next-btn').textContent = '下一题';
+            }
+        }
+
+        // 更新进度条
+        function updateProgress() {
+            const answeredCount = testState.answers.filter(answer => answer !== null).length;
+            const progressCount = document.getElementById('progress-count');
+            const progressBar = document.getElementById('progress-bar');
+            
+            progressCount.textContent = answeredCount;
+            progressBar.style.width = `${(answeredCount / 50) * 100}%`;
+        }
+
+        // 导航到下一题
+        function nextQuestion() {
+            if (testState.currentQuestion < 49) {
+                testState.currentQuestion++;
+                displayCurrentQuestion();
+            } else {
+                // 最后一题，转到提交屏幕
+                showSubmitScreen();
+            }
+        }
+
+        // 导航到上一题
+        function prevQuestion() {
+            if (testState.currentQuestion > 0) {
+                testState.currentQuestion--;
+                displayCurrentQuestion();
+            }
+        }
+
+        // 跳过当前问题
+        function skipQuestion() {
+            testState.skipped[testState.currentQuestion] = true;
+            testState.answers[testState.currentQuestion] = null;
+            
+            if (testState.currentQuestion < 49) {
+                testState.currentQuestion++;
+                displayCurrentQuestion();
+            } else {
+                showSubmitScreen();
+            }
+        }
+
+        // 显示提交屏幕
+        function showSubmitScreen() {
+            const answeredCount = testState.answers.filter(answer => answer !== null).length;
+            const skippedCount = testState.skipped.filter(skipped => skipped).length;
+            
+            document.getElementById('answered-count').textContent = answeredCount;
+            document.getElementById('skipped-count').textContent = skippedCount;
+            
+            showScreen('submit-screen');
+        }
+
+        // 计算维度分数
+        function calculateDimensionScores() {
+            return dimensions.map(dim => {
+                const scores = testState.answers.slice(dim.questions[0], dim.questions[1] + 1)
+                    .filter(score => score !== null)
+                    .map(score => parseInt(score));
+                
+                // 如果有跳过的题目，使用已回答题目的平均分估算
+                const answeredCount = scores.length;
+                const total = scores.reduce((sum, score) => sum + score, 0);
+                const average = answeredCount > 0 ? total / answeredCount : 0;
+                
+                // 估算总分（包括跳过的题目）
+                const estimatedTotal = average * 10;
+                const maxScore = 50;
+                const percentage = Math.round((estimatedTotal / maxScore) * 100);
+                
+                return {
+                    name: dim.name,
+                    desc: dim.desc,
+                    score: Math.round(estimatedTotal),
+                    maxScore: maxScore,
+                    percentage: percentage,
+                    average: average.toFixed(1),
+                    answered: answeredCount
+                };
+            });
+        }
+
+        // 分析回答模式
+        function analyzeAnswerPatterns() {
+            const dimensionScores = calculateDimensionScores();
+            
+            // 检查一致性
+            const variances = dimensionScores.map(dim => {
+                const scores = testState.answers.slice(
+                    dimensions.find(d => d.name === dim.name).questions[0],
+                    dimensions.find(d => d.name === dim.name).questions[1] + 1
+                ).filter(score => score !== null).map(score => parseInt(score));
+                
+                if (scores.length === 0) return 0;
+                
+                const avg = scores.reduce((a, b) => a + b) / scores.length;
+                const variance = scores.reduce((a, b) => a + Math.pow(b - avg, 2), 0) / scores.length;
+                return variance;
+            }).filter(v => !isNaN(v));
+            
+            const avgVariance = variances.length > 0 ? 
+                variances.reduce((a, b) => a + b) / variances.length : 0;
+            
+            let consistencyText = "";
+            if (avgVariance < 0.8) {
+                consistencyText = "您的回答表现出很好的一致性，说明您对自己的认知比较清晰稳定，在不同情境下的自我评价相对一致。";
+            } else if (avgVariance < 1.5) {
+                consistencyText = "您的回答表现出中等程度的一致性，在某些领域您的自我认知较为稳定，但在其他领域可能受到情境影响。";
+            } else {
+                consistencyText = "您的回答在不同问题上波动较大，这可能反映了您在不同生活领域或情境下自我认知的差异，也可能是您正在经历自我探索的过程。";
+            }
+            
+            return consistencyText;
+        }
+
+        // 生成个性化建议
+        function generatePersonalizedRecommendations() {
+            const dimensionScores = calculateDimensionScores();
+            const totalScore = dimensionScores.reduce((sum, dim) => sum + dim.score, 0);
+            const totalPercentage = Math.round((totalScore / 250) * 100);
+            
+            let recommendations = [];
+            
+            // 根据总分给出总体建议
+            if (totalPercentage >= 80) {
+                recommendations = [
+                    "继续保持自我反思的习惯，您已经建立了良好的自我认知基础。",
+                    "尝试将您的自我觉察能力应用到更复杂的生活决策中，发挥您的主体性优势。",
+                    "考虑担任导师角色，您的自我认知和决策能力可以帮助他人成长。"
+                ];
+            } else if (totalPercentage >= 60) {
+                recommendations = [
+                    "继续加强自我觉察练习，每天花几分钟反思当天的决策和感受。",
+                    "尝试在小事上练习独立决策，逐步建立决策信心。",
+                    "寻找与您价值观一致的活动或社群，这有助于强化您的自我认同。"
+                ];
+            } else {
+                recommendations = [
+                    "从今天开始，尝试记录每天让您感到自主决定的三个小瞬间。",
+                    "寻找一个安全的环境，练习表达您的真实想法和感受。",
+                    "设定一个小而具体的目标，并制定实现它的步骤，每完成一步都给自己肯定。",
+                    "尝试新的事物，即使是很小的变化，也能帮助您拓展舒适区。",
+                    "记住，成长是一个过程，每一次尝试都是向更自主的生活迈进的一步。"
+                ];
+            }
+            
+            // 根据最低分的维度添加针对性建议
+            const minDimension = dimensionScores.reduce((min, dim) => 
+                dim.percentage < min.percentage ? dim : min, dimensionScores[0]);
+            
+            if (minDimension.percentage < 60) {
+                if (minDimension.name.includes("自我觉察")) {
+                    recommendations.push("尝试定期进行价值观梳理，明确什么对您真正重要。");
+                } else if (minDimension.name.includes("能动性")) {
+                    recommendations.push("将大目标分解为小步骤，每完成一步都庆祝自己的进步。");
+                } else if (minDimension.name.includes("自主性")) {
+                    recommendations.push("练习在日常生活小事中自己做决定，减少依赖他人意见。");
+                } else if (minDimension.name.includes("生命意义")) {
+                    recommendations.push("尝试寻找能够体现个人价值观的活动或项目参与。");
+                } else if (minDimension.name.includes("真实性")) {
+                    recommendations.push("在安全的环境中练习表达真实想法和感受。");
+                }
+            }
+            
+            return recommendations;
+        }
+
+        // 计算分数并显示结果
+        function calculateScore() {
+            const dimensionScores = calculateDimensionScores();
+            const totalScore = dimensionScores.reduce((sum, dim) => sum + dim.score, 0);
+            const totalPercentage = Math.round((totalScore / 250) * 100);
+            
+            // 显示总分
+            document.getElementById('final-score').textContent = totalScore + '/250';
+            
+            // 确定等级和总评价
+            let level, levelDescription, totalInterpretation;
+            if (totalPercentage >= 80) {
+                level = "主体性非常强";
+                levelDescription = "您展现出高度发展的个人主体性";
+                totalInterpretation = "您的测试结果显示，您已经建立了高度发展的个人主体性。您对自己有清晰的认知，能够基于内在价值观做出决策，并且在面对挑战时表现出较强的自我效能感。您的生活具有明确的方向感和意义感，能够在各种情境中保持真实的自我表达。这种高度发展的主体性使您在生活中能够更好地应对变化，实现个人目标，并建立满意的人际关系。继续保持这种自我觉察和自主决策的能力，将有助于您在人生各个领域取得更大的成就和满足感。";
+            } else if (totalPercentage >= 65) {
+                level = "主体性较强";
+                levelDescription = "您展现出良好发展的个人主体性";
+                totalInterpretation = "您的测试结果表明，您已经建立了良好发展的个人主体性。在大多数情况下，您能够基于自我认知做出决策，并在生活中保持一定的自主性。您对自己的价值观和目标有较为清晰的认识，能够在许多情境中表达真实的自我。虽然偶尔会受到外部因素的影响，但总体上您能够保持对个人生活的掌控感。继续加强自我觉察和决策信心的培养，将有助于您进一步提升主体性，在复杂情境中更好地坚持自己的选择和价值观。";
+            } else if (totalPercentage >= 50) {
+                level = "主体性中等";
+                levelDescription = "您展现出中等程度的个人主体性";
+                totalInterpretation = "您的测试结果显示，您的个人主体性处于中等发展水平。您在某些领域能够表现出自主性和自我认知，但在其他领域可能更多地受到外部环境或他人期望的影响。您对自己的价值观和目标有一定认识，但在坚持和践行方面可能存在挑战。这种中等程度的主体性表明您正处于自我探索和发展的重要阶段。通过有意识的练习和反思，您可以进一步加强对自己的了解，提升在面对外部压力时的自主决策能力，从而发展出更稳定和一致的个人主体性。";
+            } else if (totalPercentage >= 35) {
+                level = "主体性较弱";
+                levelDescription = "您的个人主体性有待进一步发展";
+                totalInterpretation = "根据测试结果，您的个人主体性目前处于较弱的发展水平。您可能经常感到被外部环境或他人期望所推动，较难基于自己的价值观和需求做出决策。自我认知方面可能存在模糊不清的情况，导致在生活中难以保持一致的自我表达。这种较弱的主体性并不意味着个人能力的不足，而是反映了当前发展阶段的特点。通过系统的自我探索和有意识的练习，您可以逐步加强对自己的了解，培养自主决策的能力，从而发展出更强大的个人主体性，更好地掌控自己的生活方向和选择。";
+            } else {
+                level = "主体性非常弱";
+                levelDescription = "您的个人主体性需要重点关注和发展";
+                totalInterpretation = "测试结果显示，您的个人主体性目前处于非常弱的发展水平。您可能长期处于被动应对状态，较难基于自我认知做出独立决策，生活中常常感到被外部因素所控制。自我价值观和目标的模糊可能导致在生活中缺乏方向感和意义感。这种情况可能与多种因素相关，包括成长环境、生活经历或当前的心理状态。重要的是要认识到，主体性是可以发展和加强的。通过专业的指导和支持，结合系统的自我探索练习，您可以逐步建立更清晰的自我认知，培养自主决策的能力，从而实现对个人生活更有效的掌控和引导。";
+            }
+            
+            document.getElementById('result-level').textContent = levelDescription;
+            document.getElementById('total-interpretation').textContent = totalInterpretation;
+            
+            // 显示维度分析
+            const dimensionAnalysis = document.getElementById('dimension-analysis');
+            dimensionAnalysis.innerHTML = '';
+            
+            dimensionScores.forEach(dim => {
+                let dimInterpretation = "";
+                if (dim.percentage >= 80) {
+                    dimInterpretation = `您在${dim.name}方面表现优秀，${dim.desc}。这表明您在这方面已经建立了稳定的能力和习惯，能够有效地应用于日常生活中。`;
+                } else if (dim.percentage >= 65) {
+                    dimInterpretation = `您在${dim.name}方面表现良好，${dim.desc}。您在这方面有一定的基础，可以在现有基础上进一步强化和发展相关能力。`;
+                } else if (dim.percentage >= 50) {
+                    dimInterpretation = `您在${dim.name}方面处于中等水平，${dim.desc}。这表明您在这方面有一定认识，但实践和应用方面还有提升空间。`;
+                } else if (dim.percentage >= 35) {
+                    dimInterpretation = `您在${dim.name}方面有待加强，${dim.desc}。这可能影响您在这方面的表现，建议有意识地进行相关练习和培养。`;
+                } else {
+                    dimInterpretation = `您在${dim.name}方面需要重点关注，${dim.desc}。这方面的发展可能对您的整体主体性有重要影响，建议寻求更多支持和指导。`;
+                }
+                
+                const dimCard = document.createElement('div');
+                dimCard.className = 'dimension-card';
+                dimCard.innerHTML = `
+                    <div class="dimension-name">${dim.name}</div>
+                    <div class="dimension-score">${dim.percentage}%</div>
+                    <div class="dimension-bar">
+                        <div class="dimension-progress" style="width: ${dim.percentage}%"></div>
+                    </div>
+                    <div style="font-size: 14px; color: #666; margin-top: 8px;">${dimInterpretation}</div>
+                `;
+                dimensionAnalysis.appendChild(dimCard);
+            });
+            
+            // 显示模式分析
+            const patternAnalysis = analyzeAnswerPatterns();
+            document.getElementById('pattern-analysis').innerHTML = `
+                <p>${patternAnalysis}</p>
+            `;
+            
+            // 显示建议
+            const recommendations = generatePersonalizedRecommendations();
+            const recommendationsHTML = recommendations.map(rec => `<li>${rec}</li>`).join('');
+            document.getElementById('recommendations').innerHTML = `
+                <p>基于您的测试结果，我们为您准备了以下建议：</p>
+                <ul>
+                    ${recommendationsHTML}
+                </ul>
+                <p style="margin-top: 15px; font-style: italic;">请记住，个人成长是一个持续的过程，每一步都是进步。</p>
+            `;
+            
+            showScreen('result-screen');
+        }
+
+        // 重新开始测试
+        function restartTest() {
+            if(confirm("确定要重新测试吗？当前结果将会丢失。")) {
+                testState = {
+                    currentQuestion: 0,
+                    answers: new Array(50).fill(null),
+                    skipped: new Array(50).fill(false)
+                };
+                showScreen('welcome-screen');
+            }
+        }
+
+        // 初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            // 按钮事件监听
+            document.getElementById('start-btn').addEventListener('click', () => {
+                showScreen('test-screen');
+                displayCurrentQuestion();
+            });
+            
+            document.getElementById('prev-btn').addEventListener('click', prevQuestion);
+            document.getElementById('next-btn').addEventListener('click', nextQuestion);
+            document.getElementById('skip-btn').addEventListener('click', skipQuestion);
+            
+            document.getElementById('review-btn').addEventListener('click', () => {
+                testState.currentQuestion = 0;
+                showScreen('test-screen');
+                displayCurrentQuestion();
+            });
+            
+            document.getElementById('final-submit-btn').addEventListener('click', calculateScore);
+            document.getElementById('restart-btn').addEventListener('click', restartTest);
+        });
+    </script>
+</body>
+</html>
